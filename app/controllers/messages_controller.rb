@@ -23,4 +23,45 @@ class MessagesController < ApplicationController
       json :status => 201, :data => payload.serialized_payload
     end
   end
+
+  post '/messages/subscribe' do
+    request.body.rewind # in case someone already read it
+    data = JSON.parse request.body.read
+    channel = data['channel']
+    registration_token = data['registration_token']
+
+    if channel.nil? or registration_token.nil?
+      status 400
+      json status: 400, errors: ['Missing channel or registration_token']
+    else
+      uri = URI.parse("https://iid.googleapis.com/iid/v1/#{registration_token}/rel/topics/#{channel}")
+      headers = {
+          'Content-Type': 'application/json',
+          'Authorization': "key=#{settings.firebase_key}"
+      }
+
+      # Create the HTTP objects
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      request = Net::HTTP::Post.new(uri.request_uri, headers)
+
+      # Send the request
+      response = http.request(request)
+
+      # Evaluate response and propagate error if necessary
+      if response.kind_of? Net::HTTPSuccess
+        status 200
+        json status: 200
+      elsif response.kind_of? Net::HTTPForbidden
+        # Todo Log as server exception somewhere (sentry?)
+        status 500
+        json status: 500, errors: ['Firebase permission denied']
+      else
+        status 500
+        json status: 500, errors: ['Firebase server error']
+      end
+    end
+
+  end
 end
