@@ -9,7 +9,8 @@ class MessagesController < ApplicationController
   post '/messages' do
     request.body.rewind # in case someone already read it
     data = JSON.parse request.body.read
-    payload = MessagesPayload.new(data['type'],
+    payload = MessagesPayload.new(data['channel'],
+                                  data['type'],
                                   data['message'],
                                   request.env['HTTP_USER_UUID'],
                                   request.env['HTTP_USER_NAME'])
@@ -17,10 +18,9 @@ class MessagesController < ApplicationController
       status 400
       json :status => 400, :errors => payload.errors.messages
     else
-      payload_hash = payload.serialized
-      payload_hash[:message_id] = send_message('/topics/channel_general', payload_hash, settings.firebase_key)
+      payload.send_message(settings.firebase_key)
       status 201
-      json :status => 201, :data => payload_hash
+      json :status => 201, :data => payload.serialized_payload
     end
   end
 end
