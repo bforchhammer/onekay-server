@@ -1,5 +1,4 @@
 require 'sinatra/json'
-require_relative '../helpers/firebase'
 
 class MessagesController < ApplicationController
   get '/messages' do
