@@ -28,7 +28,7 @@ class MessagesPayload
 
   def fcm_data
     {
-        to: "/topic/#{@channel_id}",
+        to: "/topics/#{@channel_id}",
         data: {
             payload: {
                 type: :ADD,
