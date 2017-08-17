@@ -14,7 +14,7 @@ class MessagesPayload
   validates :message_content, presence: true
   validates :creator_uuid, presence: true
 
-  def initialize(channel, type, content, creator_uuid, creator_handle)
+  def initialize(channel, type, content, creator_uuid, creator_handle, creator_avatar=nil)
     @channel_id = channel
     @uuid = SecureRandom.uuid
     @message_id = nil # Set after successful send()
@@ -23,7 +23,7 @@ class MessagesPayload
     @timestamp = (Time.now.to_f * 1000).to_i
     @creator_uuid = creator_uuid
     @creator_handle = creator_handle
-    @creator_avatar = "https://api.adorable.io/avatars/285/#{@creator_uuid}"
+    @creator_avatar = creator_avatar ? creator_avatar : "https://api.adorable.io/avatars/100/#{@creator_uuid}"
   end
 
   def fcm_data

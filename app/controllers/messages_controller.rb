@@ -12,7 +12,8 @@ class MessagesController < ApplicationController
                                   data['type'],
                                   data['message'],
                                   request.env['HTTP_USER_UUID'],
-                                  request.env['HTTP_USER_NAME'])
+                                  request.env['HTTP_USER_NAME'],
+                                  request.env['HTTP_USER_AVATAR'])
     if payload.invalid?
       status 400
       json :status => 400, :errors => payload.errors.messages
