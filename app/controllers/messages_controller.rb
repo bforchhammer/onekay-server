@@ -27,6 +27,7 @@ class MessagesController < ApplicationController
   options '/messages/subscribe' do
     response.headers['Access-Control-Allow-Origin'] = '*'
     response.headers['Access-Control-Allow-Methods'] = 'POST'
+    response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
 
     halt 200
   end
