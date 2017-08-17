@@ -23,7 +23,7 @@ class MessagesPayload
     @timestamp = (Time.now.to_f * 1000).to_i
     @creator_uuid = creator_uuid
     @creator_handle = creator_handle
-    @creator_avatar = nil
+    @creator_avatar = "https://api.adorable.io/avatars/285/#{@creator_handle}"
   end
 
   def fcm_data
