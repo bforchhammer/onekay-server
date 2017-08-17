@@ -24,6 +24,13 @@ class MessagesController < ApplicationController
     end
   end
 
+  options '/messages/subscribe' do
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'POST'
+
+    halt 200
+  end
+
   post '/messages/subscribe' do
     request.body.rewind # in case someone already read it
     data = JSON.parse request.body.read
