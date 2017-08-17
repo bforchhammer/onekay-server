@@ -22,6 +22,7 @@ class MessagesPayload
   def serialized
     {
         uuid: @uuid,
+        channel: '/topics/channel_general',
         message: {
             type: @message_type,
             content: @message_content,
