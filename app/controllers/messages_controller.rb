@@ -11,6 +11,7 @@ class MessagesController < ApplicationController
     payload = MessagesPayload.new(data['channel'],
                                   data['type'],
                                   data['message'],
+                                  data['client_message_uuid'],
                                   request.env['HTTP_USER_UUID'],
                                   request.env['HTTP_USER_NAME'],
                                   request.env['HTTP_USER_AVATAR'])

@@ -7,14 +7,14 @@ require 'json'
 class MessagesPayload
   include ActiveModel::Validations
 
-  attr_accessor :uuid, :channel_id, :message_type, :message_content, :timestamp, :creator_uuid, :creator_handle
+  attr_accessor :uuid, :channel_id, :message_type, :message_content, :timestamp, :creator_uuid, :creator_handle, :client_message_uuid
 
   validates :channel_id, presence: true
   validates :message_type, inclusion: %w(text image)
   validates :message_content, presence: true
   validates :creator_uuid, presence: true
 
-  def initialize(channel, type, content, creator_uuid, creator_handle, creator_avatar=nil)
+  def initialize(channel, type, content, client_message_uuid, creator_uuid, creator_handle, creator_avatar=nil)
     @channel_id = channel
     @uuid = SecureRandom.uuid
     @message_id = nil # Set after successful send()
@@ -24,6 +24,7 @@ class MessagesPayload
     @creator_uuid = creator_uuid
     @creator_handle = creator_handle
     @creator_avatar = creator_avatar ? creator_avatar : "https://api.adorable.io/avatars/100/#{@creator_uuid}"
+    @client_message_uuid =  client_message_uuid
   end
 
   def fcm_data
@@ -41,6 +42,7 @@ class MessagesPayload
   def serialized_payload
     {
         uuid: @uuid,
+        client_message_uuid: @client_message_uuid,
         channel_id: @channel_id,
         content: {
             type: @message_type,
