@@ -14,6 +14,7 @@ class MessagesController < ApplicationController
   end
 
   post '/messages' do
+    response.headers['Access-Control-Allow-Origin'] = '*'
     request.body.rewind # in case someone already read it
     data = JSON.parse request.body.read
     payload = MessagesPayload.new(data['channel'],
@@ -42,6 +43,7 @@ class MessagesController < ApplicationController
   end
 
   post '/messages/subscribe' do
+    response.headers['Access-Control-Allow-Origin'] = '*'
     request.body.rewind # in case someone already read it
     data = JSON.parse request.body.read
     channel = data['channel']
