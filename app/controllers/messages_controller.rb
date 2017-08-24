@@ -5,6 +5,14 @@ class MessagesController < ApplicationController
     "You don't GET anything! 😊"
   end
 
+  options '/messages' do
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'POST'
+    response.headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, User-Uuid, User-Name, User-Avatar'
+
+    halt 200
+  end
+
   post '/messages' do
     request.body.rewind # in case someone already read it
     data = JSON.parse request.body.read
